@@ -29,12 +29,12 @@ ordered_test[avg_price_by_group, on = .(qc_code, total_bathrooms), SalePrice := 
 
 na_cases <- ordered_test[is.na(SalePrice)]
 
-if (nrow(na_cases) > 0) {
+global_avg <- mean(ordered_test$SalePrice, na.rm = TRUE)
+
+if (nrow(ordered_test[is.na(SalePrice)]) > 0) {
   global_avg <- mean(ordered_test$SalePrice, na.rm = TRUE)
   ordered_test[is.na(SalePrice), SalePrice := global_avg]
 }
-
-global_avg2 <- mean(ordered_test$SalePrice)
 
 # select columns Id and SalePrice from test
 submit <- ordered_test[,.(Id, SalePrice)]
