@@ -23,10 +23,10 @@ ordered_test <- test[order(sort_col)]
 # after rows are in order, group the train by something, get average saleprice in group
 # Note: train has values. Test does not.
 # Create new column, average salesprice column
-avg_price_by_group <- train[, .(mean_prices = mean(SalePrice)), by = .(qc_code, FullBath)]
+avg_price_by_group <- train[, .(mean_prices = mean(SalePrice)), by = .(qc_code, total_bathrooms)]
 
 # merge the avg table to the test table, overwrite salesprice house_dt col with prev results.
-ordered_test[avg_price_by_group, on = .(qc_code, FullBath), SalePrice := mean_prices]
+ordered_test[avg_price_by_group, on = .(qc_code, total_bathrooms), SalePrice := mean_prices]
 global_avg <- mean(ordered_test$SalePrice, na.rm = TRUE)
 
 # select columns Id and SalePrice from test
