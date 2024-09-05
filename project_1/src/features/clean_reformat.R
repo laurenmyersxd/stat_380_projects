@@ -21,16 +21,23 @@ test$sort_col<- as.integer(test$sort_col)
 ordered_test <- test[order(sort_col)]
   
 # after rows are in order, group the train by something, get average saleprice in group
-# Note: train has values. Test does not.
 # Create new column, average salesprice column
 avg_price_by_group <- train[, .(mean_prices = mean(SalePrice)), by = .(qc_code, total_bathrooms)]
 
 # merge the avg table to the test table, overwrite salesprice house_dt col with prev results.
 ordered_test[avg_price_by_group, on = .(qc_code, total_bathrooms), SalePrice := mean_prices]
-global_avg <- mean(ordered_test$SalePrice, na.rm = TRUE)
+
+na_cases <- ordered_test[is.na(SalePrice)]
+
+if (nrow(na_cases) > 0) {
+  global_avg <- mean(ordered_test$SalePrice, na.rm = TRUE)
+  ordered_test[is.na(SalePrice), SalePrice := global_avg]
+}
+
+global_avg2 <- mean(ordered_test$SalePrice)
 
 # select columns Id and SalePrice from test
-submit <- test[,.(Id, SalePrice)]
+submit <- ordered_test[,.(Id, SalePrice)]
 # write-out test table to process folder as .csv
 fwrite(submit, "./volume/data/processed/submit.csv")  
 
