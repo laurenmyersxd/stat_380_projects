@@ -1,2 +1,2 @@
-source("./required/requirements.R")
-source("./src/features/clean_reformat.R")
+source("./project/required/requirements.R")
+source("./project/src/features/clean_reformat.R")

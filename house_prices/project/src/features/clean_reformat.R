@@ -1,8 +1,8 @@
 library(data.table)
 
-house_dt <- fread("./volume/data/raw/Stat_380_housedata.csv")
-qc_data <- fread("./volume/data/raw/Stat_380_QC_table.csv")
-ex_sub <- fread("./volume/data/raw/example_sub.csv")
+house_dt <- fread("./project/volume/data/raw/Stat_380_housedata.csv")
+qc_data <- fread("./project/volume/data/raw/Stat_380_QC_table.csv")
+ex_sub <- fread("./project/volume/data/raw/example_sub.csv")
 
 # Create new column vector, house_dt, totaling the half and full baths
 house_dt[, total_bathrooms := HalfBath * 0.5 + FullBath]
@@ -35,6 +35,6 @@ if (nrow(ordered_test[is.na(SalePrice)]) > 0) {
 # select columns Id and SalePrice from test
 submit <- ordered_test[,.(Id, SalePrice)]
 # write-out test table to process folder as .csv
-fwrite(submit, "./volume/data/processed/submit.csv")  
+fwrite(submit, "./project/volume/data/processed/submit.csv")  
 
   
